@@ -351,7 +351,6 @@ def on_start():
     info_label = tk.Label(side_frame, text=text, justify=tk.LEFT, font=("Arial", 12), bg="white")
     info_label.pack(pady=10)
     disable_button(start_button, "lightgreen")
-    enable_button(task_manager_button, "yellow")
     highlight_trace(points, total_time=total_time)
 
 def on_help():
@@ -910,7 +909,6 @@ start_button.pack(side=tk.LEFT,pady=10,padx=10, expand=True, fill=tk.BOTH, ancho
 stop_button = tk.Button(top_frame, text="Task Manager", command=on_task_manager, height=4, width=10, bg="yellow",
                         fg="black")
 stop_button.pack(side=tk.LEFT, pady=10, padx=10, expand=True, fill=tk.BOTH, anchor=tk.CENTER)
-disable_button(stop_button, "lightyellow")
 
 # Pulsante Help
 help_button = tk.Button(top_frame, text="Help", command=on_help, height=4, width=10, bg="lightblue", fg="black")
