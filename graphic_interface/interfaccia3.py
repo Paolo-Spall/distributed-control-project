@@ -874,6 +874,9 @@ img = mpimg.imread(image_path)
 root = tk.Tk()
 root.title("Draw the route")
 
+screen_width = root.winfo_screenwidth()
+screen_height = root.winfo_screenheight()
+
 # Crea il frame laterale con altezza limitata a metà della schermata
 horizontal_frame = tk.Frame(root, height=5, bg="white")
 horizontal_frame.pack(side=tk.TOP, fill=tk.X, padx=0)
