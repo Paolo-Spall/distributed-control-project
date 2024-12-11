@@ -193,8 +193,7 @@ def on_mouse_release(event):
     draw_end_message()
     disable_drawing()
     set_default_cursor()
-
-    #miaooooo
+    enable_button(start_button, "green")
 
 
 # Funzione per generare un percorso geometrico chiuso alternativo
@@ -255,7 +254,7 @@ def highlight_trace(points, color='red', total_time=5):
     points = np.array(points)
 
     n_points = len(points)
-    real_time = 60
+    real_time = 6#0
 
     lengths = []
     tot_length = 0.
@@ -352,6 +351,8 @@ def on_start():
     info_label.pack(pady=10)
     disable_button(start_button, "lightgreen")
     highlight_trace(points, total_time=total_time)
+    save_final_report()
+    enable_drawing()
 
 def on_help():
     # Crea una finestra figlia indipendente
@@ -904,6 +905,8 @@ top_frame.pack(side=tk.BOTTOM, fill=tk.X)
 # Pulsante Done
 start_button = tk.Button(top_frame, text="Start", command=on_start, height=4, width=10, bg="green", fg="black")
 start_button.pack(side=tk.LEFT,pady=10,padx=10, expand=True, fill=tk.BOTH, anchor=tk.CENTER)
+
+disable_button(start_button, "lightgreen")
 
 # Pulsante Task Manager
 stop_button = tk.Button(top_frame, text="Task Manager", command=on_task_manager, height=4, width=10, bg="yellow",
