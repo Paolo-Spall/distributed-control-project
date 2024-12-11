@@ -187,7 +187,6 @@ def on_mouse_release(event):
     draw_end_message()
     disable_drawing()
     set_default_cursor()
-    route_control()
 
     #miaooooo
 
@@ -304,6 +303,7 @@ def on_start():
     weather = initial_weather  # Usa lo stesso meteo iniziale
     temperature = initial_temperature  # Usa la stessa temperatura iniziale
     total_time = hours * 60 + minutes
+
     horizontal_frame.destroy()
 
     side_frame = tk.Frame(root, width=200, bg="white")
@@ -344,6 +344,7 @@ def on_start():
     # Etichetta per il secondo messaggio
     info_label = tk.Label(side_frame, text=text, justify=tk.LEFT, font=("Arial", 12), bg="white")
     info_label.pack(pady=10)
+    highlight_trace(points, total_time=total_time)
 
 def on_help():
     # Crea una finestra figlia indipendente
@@ -757,7 +758,7 @@ def draw_end_message():
     # Testo del messaggio
     message = (
         "Well done! The route is designed.\n"
-        "Decide to continue or redo the route .\n"
+        "Send the drones to check the path? .\n"
     )
 
     # Label per visualizzare il messaggio
@@ -769,21 +770,22 @@ def draw_end_message():
     button_frame.pack(pady=20)
 
     # Pulsante "Continue"
-    button_continue = tk.Button(button_frame, text="Continue", command=lambda: continue_command(window),
+    button_continue = tk.Button(button_frame, text="Check", command=lambda: drones_check(window),
                                 font=("Arial", 12))
     button_continue.grid(row=0, column=0, padx=20)  # Posiziona il primo pulsante con uno spazio a destra
 
     # Pulsante "Redo"
-    button_redo = tk.Button(button_frame, text="Redo", command=lambda: redo_command(window), font=("Arial", 12))
+    button_redo = tk.Button(button_frame, text="Re-design", command=lambda: redo_command(window), font=("Arial", 12))
     button_redo.grid(row=0, column=1, padx=20)  # Posiziona il secondo pulsante con uno spazio a sinistra
 
     # Impedisce che altre interazioni avvengano nella finestra principale
     window.transient(root)
     window.grab_set()
 
-def continue_command(window):
-    window.destroy()
-
+#Conferma che la traccia è stata disegnata correttamente
+def continue_command(old_window=None):
+    if old_window:
+        old_window.destroy()
 
     new_window = tk.Toplevel(root)
     new_window.title("Draw the route")
@@ -816,19 +818,22 @@ def redo_command(window):
     set_pencil_cursor()
 
 
-def route_control():
+def drones_check(old_window):
+    old_window.destroy()
     global discard_route
     discard_route = random.choice([True, False, False, False, False, False])
+    #discard_route = random.choice([True,True])
+
     if discard_route:
         window = tk.Toplevel(root)
         window.title("Route Control")
-        window.geometry("300x200+500+400")
+        window.geometry("450x200+500+400")
         window.configure(bg="lightgray")
 
         # Testo del messaggio
         message = (
-            "The drones didn't accept the route.\n"
-            "DO you want to re-draw the route?\n"
+            "The drones didn't accept the route.They propose a new route,\n"
+            "do you want to accept it or re-draw the route?\n"
         )
 
         # Label per visualizzare il messaggio
@@ -839,25 +844,27 @@ def route_control():
         button_frame = tk.Frame(window, bg="lightgray")
         button_frame.pack(pady=20)
 
-        # Pulsante "Redraw"
-        button_redraw = tk.Button(button_frame, text="Continue", command=lambda: redo_command(window),
-                                  font=("Arial", 12))
-        button_redraw.grid(row=0, column=0, padx=20)  # Posiziona il primo pulsante con uno spazio a destra
-
         # Pulsante accept modify by the drones
-        button_accept = tk.Button(button_frame, text="Redo", command=lambda: accept_command(window), font=("Arial", 12))
-        button_accept.grid(row=0, column=1, padx=20)  # Posiziona il secondo pulsante con uno spazio a sinistra
+        button_accept = tk.Button(button_frame, text="Accept drone's route", command=lambda: accept_command(window),
+                                  font=("Arial", 12))
+        button_accept.grid(row=0, column=0, padx=20)  # Posiziona il secondo pulsante con uno spazio a sinistra
+
+        # Pulsante "Redraw"
+        button_redraw = tk.Button(button_frame, text="Redo", command=lambda: redo_command(window),
+                                  font=("Arial", 12))
+        button_redraw.grid(row=0, column=1, padx=20)  # Posiziona il primo pulsante con uno spazio a destra
 
         # Impedisce che altre interazioni avvengano nella finestra principale
         window.transient(root)
         window.grab_set()
-
+    else:
+        continue_command()
 
 def accept_command(window):
+    global points
     points = generate_closed_random_route()
     plot_path(points, finished=True)
-    window.destroy()
-
+    continue_command(window)
 
 
 # Carica l'immagine di sfondo
