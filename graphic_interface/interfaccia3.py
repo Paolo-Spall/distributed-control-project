@@ -102,6 +102,12 @@ def error_message():
     position_right = (screen_width // 2) - (window_width // 2)
     window.geometry(f"{window_width}x{window_height}+{position_right}+{position_top}")
 
+def disable_button(button, color):
+    button.config(state=tk.DISABLED, bg=color)
+
+def enable_button(button, color):
+    button.config(state=tk.NORMAL, bg=color)
+
 def enable_drawing():
     canvas.mpl_connect("button_press_event", on_mouse_press)
     canvas.mpl_connect("motion_notify_event", on_mouse_move)
@@ -344,6 +350,8 @@ def on_start():
     # Etichetta per il secondo messaggio
     info_label = tk.Label(side_frame, text=text, justify=tk.LEFT, font=("Arial", 12), bg="white")
     info_label.pack(pady=10)
+    disable_button(start_button, "lightgreen")
+    enable_button(task_manager_button, "yellow")
     highlight_trace(points, total_time=total_time)
 
 def on_help():
@@ -794,10 +802,8 @@ def continue_command(old_window=None):
 
     # Testo del messaggio
     message = (
-        "Now that the path is ready, press Start when you're ready to launch the program.\n"
-        "If the path is feasible, grazing will begin; otherwise, an alternative route will be initiated.\n"
+        "Now that the path is ready, press Start  to launch the program.\n"
     )
-
     # Label per visualizzare il messaggio
     label = tk.Label(new_window, text=message, bg="lightgray", justify="left", font=("Arial", 12))
     label.pack(padx=20, pady=20)
@@ -904,6 +910,7 @@ start_button.pack(side=tk.LEFT,pady=10,padx=10, expand=True, fill=tk.BOTH, ancho
 stop_button = tk.Button(top_frame, text="Task Manager", command=on_task_manager, height=4, width=10, bg="yellow",
                         fg="black")
 stop_button.pack(side=tk.LEFT, pady=10, padx=10, expand=True, fill=tk.BOTH, anchor=tk.CENTER)
+disable_button(stop_button, "lightyellow")
 
 # Pulsante Help
 help_button = tk.Button(top_frame, text="Help", command=on_help, height=4, width=10, bg="lightblue", fg="black")
