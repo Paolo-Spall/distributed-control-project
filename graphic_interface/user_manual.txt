@@ -1,0 +1,52 @@
+
+
+Version details 
+Contacts
+Additional utils
+
+
+Welcome to the user guide for your program.
+This manual will guide you using the control system to manage your flock.
+
+The idea:
+The flock is enclosed within a fenced area equipped with shelter and feeding trou￾ghs, where the sheep remain when the shepherd does not need to send them for
+continuous grazing, where they spend 8 out of 24 hours daily.
+Additionally, to ensure the flock’s health, each sheep is monitored via smart collar
+that indicates the animal’s health status.
+The decision to let the flock out of the enclosure is made by the shepherd, who
+monitors the data from the sensors and assesses whether the sheep need to graze.
+The flock is guided by four robotic dogs supervised by a shepherd, ensuring the
+correct direction of the animals.
+When the shepherd decides to begin grazing, the robotic dogs lead the sheep toward
+a turnstile, where the sheep inside the enclosure are sorted according to the signals
+from the collar, ensuring that only healthy sheep go out to graze, while the unheal￾thy ones remain inside the enclosure.
+Three drones support the operation by providing proper mapping of the area, iden￾tifying water sources and potential dangers, guiding the flock, and gathering atmo￾spheric data.
+After sorting, the flock is guided through obstacles and kept compact by the four
+dogs, each of which covers a specific portion, following the path indicated by the
+drones.
+Additionally, the drones assist the dogs in identifying sheep that stray from the
+flock, while also creating an obstacle-free and safe route, flat and not exceeding 8
+hours of grazing, or 32 km, assuming the sheep walk at a speed of 4 km/h, with a
+final return to the sheepfold.
+To ensure the flock’s guidance, we assume that both the dogs and drones are equip￾ped with GPS and cameras.
+When the number of sensors on the collars indicating fatigue exceeds a certain limit,
+the drones monitoring the area generate a path to the nearest water source, free of
+obstacles; once the route is generated, the information is sent to the dogs, which
+ensure the correct direction towards the desired point.
+We assume that the sheep are equal and exhibit random behavior in terms of illness,
+straying from the group and fatigue.
+
+
+
+Buttons information:
+- Start: to start the program
+- Task Manager: to manage the graze
+- Weather: to visualize the weather conditions
+- Program Overview: to get more information
+- Quit: to exit the program
+
+Information about drones
+
+Information about robotic dogs
+
+Additional information
