@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import messagebox, font
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
@@ -300,7 +300,7 @@ def highlight_trace(points, color='red', total_time=5):
     time.sleep(delay)
 
 #Funzione per gestire il click sul pulsante "Fatto"
-def on_start():
+def on_start(side_frame):
     global discard_route
     global points
     global current_weather, initial_temperature
@@ -311,8 +311,7 @@ def on_start():
 
     horizontal_frame.destroy()
 
-    side_frame = tk.Frame(root, width=200, bg="white", bd=2, relief="solid")
-    side_frame.place(x=0, y=0)
+    
 
     # Etichetta per il primo messaggio (inizialmente vuota o con un testo di placeholder)
     message_label = tk.Label(
@@ -887,10 +886,10 @@ img = mpimg.imread(image_path)
 
 # Finestra principale di Tkinter
 root = tk.Tk()
-root.title("Draw the route")
+root.title("Automated Sheperding System")   
 
-# Imposta la finestra a schermo intero
-root.attributes("-fullscreen", True)
+# # Imposta la finestra a schermo intero
+# root.attributes("-fullscreen", True)
 
 # Configura la chiusura della finestra
 root.protocol("WM_DELETE_WINDOW", lambda: root.destroy())
@@ -898,6 +897,9 @@ root.protocol("WM_DELETE_WINDOW", lambda: root.destroy())
 
 screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
+
+# Set the size of the main window
+root.geometry(f"{screen_width}x{screen_height}")  # Width x Height
 
 # Crea il frame laterale con altezza limitata a metà della schermata
 horizontal_frame = tk.Frame(root, height=5, bg="white")
@@ -910,41 +912,52 @@ message_label.pack(side=tk.TOP, fill=tk.X, padx=30)
 # Meteo iniziale
 initial_weather, initial_temperature = get_random_initial_weather()
 
+
+side_frame = tk.Frame(root, bg="white", bd=2, relief="solid", width=screen_width//5)
+side_frame.pack(fill=tk.Y, side=tk.RIGHT, padx=10, pady=10)
+
+
 # Frame inferiore per il pulsante--> pulsanti in basso
 bottom_frame = tk.Frame(root)
-bottom_frame.pack(side=tk.LEFT, fill=tk.X)
+bottom_frame.pack(side=tk.LEFT, fill=tk.Y)
 
 ##########################################
 #PULSANTI
 
-# Pulsante Done
-start_button = tk.Button(bottom_frame, text="Start", command=on_start, height=4, width=10, bg="green", fg="black")
-start_button.pack(side=tk.LEFT,pady=10,padx=10, expand=True, fill=tk.BOTH, anchor=tk.CENTER)
+large_font = font.Font(size=screen_height//40)
+medium_font = font.Font(size=screen_height//50)
+
+# Pulsante weather
+weather_button = tk.Button(bottom_frame, text="Weather", command=on_weather, bg="lightblue",
+                           fg="black", font = large_font)  # , font=("Arial", 20))
+weather_button.pack(side=tk.BOTTOM, pady=10, padx=10, expand=True, fill=tk.BOTH, anchor=tk.CENTER)
+
+# Pulsante Task Manager
+task_manager_button = tk.Button(bottom_frame, text="Task Manager", command=on_task_manager, bg="yellow",
+                        fg="black", font = large_font)
+task_manager_button.pack(side=tk.BOTTOM, pady=10, padx=10, expand=True, fill=tk.BOTH, anchor=tk.CENTER)
+
+# Pulsante Program Overview
+program_overview_button = tk.Button(bottom_frame, text="Activity Overview", command=on_further_info,  bg="lightblue",
+                        fg="black", font = large_font)
+program_overview_button.pack(side=tk.BOTTOM, pady=10, padx=10, expand=True, fill=tk.BOTH, anchor=tk.CENTER)
+
+
+# Pulsante Start
+start_button = tk.Button(bottom_frame, text="Start", command=partial(on_start, side_frame),  bg="green", fg="black", font = large_font)
+start_button.pack(side=tk.BOTTOM,pady=10,padx=10, expand=True, fill=tk.BOTH, anchor=tk.CENTER)
 
 disable_button(start_button, "lightgreen")
 
-# Pulsante Task Manager
-task_manager_button = tk.Button(bottom_frame, text="Task Manager", command=on_task_manager, height=4, width=10, bg="yellow",
-                        fg="black")
-task_manager_button.pack(side=tk.UP, pady=10, padx=10, expand=True, fill=tk.BOTH, anchor=tk.CENTER)
 
 # Pulsante Help
-help_button = tk.Button(bottom_frame, text="Help", command=on_help, height=4, width=10, bg="lightblue", fg="black")
-help_button.pack(side=tk.LEFT, pady=10, padx=10, expand=True, fill=tk.BOTH, anchor=tk.CENTER)
+help_button = tk.Button(bottom_frame, text="Help", command=on_help,  bg="lightblue", fg="black", font = medium_font)
+help_button.pack(side=tk.TOP, pady=10, padx=10, expand=True, fill=tk.BOTH, anchor='ne')
 
-# Pulsante weather
-weather_button = tk.Button(bottom_frame, text="Weather", command=on_weather, height=4, width=10, bg="lightblue",
-                           fg="black")  # , font=("Arial", 20))
-weather_button.pack(side=tk.LEFT, pady=10, padx=10, expand=True, fill=tk.BOTH, anchor=tk.CENTER)
-
-# Pulsante Program Overview
-program_overview_button = tk.Button(bottom_frame, text="Program Overview", command=on_further_info, height=4, width=10, bg="lightblue",
-                        fg="black")
-program_overview_button.pack(side=tk.LEFT, pady=10, padx=10, expand=True, fill=tk.BOTH, anchor=tk.CENTER)
 
 # Pulsante quit
-quit_button = tk.Button(bottom_frame, text="Quit", command=on_quit_program, height=4, width=10, bg="red", fg="black")
-quit_button.pack(side=tk.LEFT,pady=10,padx=10, expand=True, fill=tk.BOTH, anchor=tk.CENTER)
+quit_button = tk.Button(bottom_frame, text="Quit", command=on_quit_program,  bg="red", fg="black", font=medium_font)
+quit_button.pack(side=tk.TOP,pady=10,padx=10, expand=True, fill=tk.BOTH, anchor='nw')
 
 
 
@@ -953,8 +966,10 @@ quit_button.pack(side=tk.LEFT,pady=10,padx=10, expand=True, fill=tk.BOTH, anchor
 #Creazione mappa
 
 #frame per la mappa
-right_frame = tk.Frame(root)
-right_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
+map_frame_width = round(screen_width)#*2/3)
+
+right_frame = tk.Frame(root, width=1900, bg="yellow")
+right_frame.pack(side=tk.LEFT, fill=tk.Y, expand=True)
 
 # Mostra il messaggio iniziale
 initial_message()
@@ -968,7 +983,9 @@ ax.set_ylim(0, img.shape[0])
 
 # Collega il grafico Matplotlib al frame inferiore e posizionalo con place
 canvas = FigureCanvasTkAgg(fig, master=right_frame)
-canvas.get_tk_widget().place(x=500, y=0, width=800, height=800)
+
+ 
+canvas.get_tk_widget().place(x=0, y=0, width=1000, height=round(screen_height*2/3))
 
 # Configura la chiusura della finestra
 root.protocol("WM_DELETE_WINDOW", lambda: root.destroy())
