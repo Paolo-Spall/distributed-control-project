@@ -353,6 +353,7 @@ def on_start():
     highlight_trace(points, total_time=total_time)
     save_final_report()
     enable_drawing()
+    set_pencil_cursor()
 
 def on_help():
     # Crea una finestra figlia indipendente
@@ -889,47 +890,46 @@ horizontal_frame.pack(side=tk.TOP, fill=tk.X, padx=0)
 
 # Etichetta per i messaggi dinamici
 message_label = tk.Label(horizontal_frame, text="", font=("Arial", 14), wraplength=1000, justify=tk.LEFT, bg="white")
-message_label.pack(side=tk.TOP, fill = tk.X,padx=30)
+message_label.pack(side=tk.TOP, fill=tk.X, padx=30)
 
 # Meteo iniziale
 initial_weather, initial_temperature = get_random_initial_weather()
 
-
-# Frame inferiore per il pulsante
-top_frame = tk.Frame(root)
-top_frame.pack(side=tk.BOTTOM, fill=tk.X)
+# Frame inferiore per il pulsante--> pulsanti in basso
+bottom_frame = tk.Frame(root)
+bottom_frame.pack(side=tk.BOTTOM, fill=tk.X)
 
 ##########################################
 #PULSANTI
 
 # Pulsante Done
-start_button = tk.Button(top_frame, text="Start", command=on_start, height=4, width=10, bg="green", fg="black")
+start_button = tk.Button(bottom_frame, text="Start", command=on_start, height=4, width=10, bg="green", fg="black")
 start_button.pack(side=tk.LEFT,pady=10,padx=10, expand=True, fill=tk.BOTH, anchor=tk.CENTER)
 
 disable_button(start_button, "lightgreen")
 
 # Pulsante Task Manager
-stop_button = tk.Button(top_frame, text="Task Manager", command=on_task_manager, height=4, width=10, bg="yellow",
+task_manager_button = tk.Button(bottom_frame, text="Task Manager", command=on_task_manager, height=4, width=10, bg="yellow",
                         fg="black")
-stop_button.pack(side=tk.LEFT, pady=10, padx=10, expand=True, fill=tk.BOTH, anchor=tk.CENTER)
+task_manager_button.pack(side=tk.LEFT, pady=10, padx=10, expand=True, fill=tk.BOTH, anchor=tk.CENTER)
 
 # Pulsante Help
-help_button = tk.Button(top_frame, text="Help", command=on_help, height=4, width=10, bg="lightblue", fg="black")
+help_button = tk.Button(bottom_frame, text="Help", command=on_help, height=4, width=10, bg="lightblue", fg="black")
 help_button.pack(side=tk.LEFT, pady=10, padx=10, expand=True, fill=tk.BOTH, anchor=tk.CENTER)
 
 # Pulsante weather
-weather_button = tk.Button(top_frame, text="Weather", command=on_weather, height=4, width=10, bg="lightblue",
+weather_button = tk.Button(bottom_frame, text="Weather", command=on_weather, height=4, width=10, bg="lightblue",
                            fg="black")  # , font=("Arial", 20))
 weather_button.pack(side=tk.LEFT, pady=10, padx=10, expand=True, fill=tk.BOTH, anchor=tk.CENTER)
 
 # Pulsante Program Overview
-stop_button = tk.Button(top_frame, text="Program Overview", command=on_further_info, height=4, width=10, bg="lightblue",
+program_overview_button = tk.Button(bottom_frame, text="Program Overview", command=on_further_info, height=4, width=10, bg="lightblue",
                         fg="black")
-stop_button.pack(side=tk.LEFT, pady=10, padx=10, expand=True, fill=tk.BOTH, anchor=tk.CENTER)
+program_overview_button.pack(side=tk.LEFT, pady=10, padx=10, expand=True, fill=tk.BOTH, anchor=tk.CENTER)
 
 # Pulsante quit
-stop_button = tk.Button(top_frame, text="Quit", command=on_quit_program, height=4, width=10, bg="red", fg="black")
-stop_button.pack(side=tk.LEFT,pady=10,padx=10, expand=True, fill=tk.BOTH, anchor=tk.CENTER)
+quit_button = tk.Button(bottom_frame, text="Quit", command=on_quit_program, height=4, width=10, bg="red", fg="black")
+quit_button.pack(side=tk.LEFT,pady=10,padx=10, expand=True, fill=tk.BOTH, anchor=tk.CENTER)
 
 
 
@@ -951,9 +951,9 @@ ax.imshow(img, extent=[0, img.shape[1], 0, img.shape[0]])
 ax.set_xlim(0, img.shape[1])
 ax.set_ylim(0, img.shape[0])
 
-# Collega il grafico Matplotlib al frame inferiore
+# Collega il grafico Matplotlib al frame inferiore e posizionalo con place
 canvas = FigureCanvasTkAgg(fig, master=bottom_frame)
-canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
+canvas.get_tk_widget().place(x=300, y=0, width=800, height=600)
 
 # Configura la chiusura della finestra
 root.protocol("WM_DELETE_WINDOW", lambda: root.destroy())
