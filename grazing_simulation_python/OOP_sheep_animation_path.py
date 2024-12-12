@@ -31,6 +31,7 @@ class Simulation:
         self.bounding_box = np.array([-self.l_coverage + self.center[0], self.l_coverage + self.center[0],
                                       -self.l_coverage + self.center[1], self.l_coverage+self.center[1]])
         # [x_min, x_max, y_min, y_max]
+        self.chasing_assignment = []
 
     def initial_configurations(self, dt, speed):
         self.tracking_speed = speed
@@ -98,6 +99,32 @@ class Simulation:
     def formation_control_off(self):
         for dog in self.dogs_form:
             dog.formation_flag = False
+
+    def assign_chasing_dogs(self):
+        self.chasing_assignment.clear()
+        for sheep in self.lose_sheeps:
+            dist = 1000
+            dist_pusher = 1000
+            chased_sheep = sheep
+            chasing_dog = None
+            dog_pusher = None # cane che spinge il branco
+            i = 0
+            for dog in self.dogs:
+                if not dog.chasing_sheep:
+                     i += 1
+                     if i == 1:
+                         dist_pusher = np.linalg.norm(sheep.P - dog.P)
+                     else:
+                        if np.linalg.norm(sheep.P - dog.P) < dist_pusher:
+                            chasing_dog = dog_pusher
+                            dog_pusher = dog
+                            dist = dist_pusher
+                            dist_pusher = np.linalg.norm(sheep.P - dog.P)
+            if chasing_dog is not None:
+                self.chasing_assignment.append([chasing_dog, chased_sheep])
+                chasing_dog = None
+
+
     
     def track_path(self):
         """compute the common control input for the dogs to track the path"""
@@ -136,6 +163,8 @@ class Simulation:
         self.compute_dog_center()
         self.track_path()
         #self.compute_center_velocity(dt)
+        self.assign_chasing_dogs()
+        #print(self.chasing_assignment)
         for dog in self.dogs:
             dog.step(dt)
         for sheep in self.sheeps:
@@ -249,7 +278,7 @@ class Simulation:
                     sim.setObjectPosition(copp_agent, -1, py_agent.trail[i].tolist() + [4])
                 else:
                     sim.setObjectPosition(copp_agent, -1, py_agent.trail[i].tolist() + [0])
-            #time.sleep(0.1)
+            #time.sleep(0.01)
 
         #sim.saveScene('scene.ttt')
         #sim.stopSimulation()

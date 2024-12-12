@@ -34,7 +34,6 @@ class Dog:
         self.V = np.array([0, 0])
         self.A = np.array([0, 0])
         ########################################
-        self.chasing_dog = None
         self.chasing_sheep = None  # pecora che sta inseguendo
         self.int_point = False # intermediate point to generate chasing trajectory
         self.K = 50
@@ -49,12 +48,18 @@ class Dog:
             self.P = self.P + (self.V + self.sim.tracking_velocity) * dt
             #self.P = self.P + (self.V) * dt
 
-            if self.sim.lose_sheeps and len(self.sim.dogs_form)>3:
-                self.chasing_sheep = self.sim.lose_sheeps.pop(0)
-                self.sim.dogs_form.remove(self)
-                self.chasing_sheep.chased = True
+            # Cerca sé stesso nella lista self.sim.chasing_dog
+            for pair in self.sim.chasing_assignment:
+                if len(self.sim.dogs_form) > 3:
+                    if self == pair[0]:  # Se il cane è il primo elemento della coppia
+                        self.chasing_sheep = pair[1]  # Assegna la pecora da inseguire
+                        self.sim.lose_sheeps.remove(self.chasing_sheep)  # Rimuove la pecora da lose_sheeps
+                        self.sim.dogs_form.remove(self)  # Rimuove il cane da dogs_form
+                        self.sim.chasing_assignment.remove(pair)  # Rimuove l'intera coppia da chasing_dog
+                        self.chasing_sheep.chased = True  # Imposta la pecora come inseguita
+                        break  # Esci dal ciclo una volta trovata la corrispondenza
 
-        else:  #sta inseguendo una pecora
+        if self.chasing_sheep:  #sta inseguendo una pecora
             self.marker = "*"
             sheep_pos = self.chasing_sheep.P
             if points_dist(sheep_pos, self.sim.center) <= self.re_entered:  #La pecora è rientrata
@@ -157,7 +162,7 @@ class Sheep:
     ka = 50.
     c = 2.
     m = 1.
-    speed_limit = 100
+    speed_limit = 30
 
     def __init__(self, initial_area, center,  simulation) -> None:
         self.sim = simulation
@@ -196,8 +201,6 @@ class Sheep:
                      , self.speed_limit)  # Velocity limit
         self.P = self.P + self.V * dt
         self.trail.append(self.P)
-        '''if self.V[0] or self.V[1] >= 90:
-            print("velocità troppo alta")'''
 
     def compute_dog_reaction(self, dogs_list):
         reaction = np.array([0., 0.])

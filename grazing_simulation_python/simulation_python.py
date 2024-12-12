@@ -20,10 +20,10 @@ a.initial_configurations(dt, tracking_speed)
 a.add_drones(5, initial_area=5, center=a.center_trail[0])
 a.add_sheeps(20, 3)
 a.enter_path(points)
-print("lost sheep:", len(a.lose_sheeps))
 
 # simuation
 a.simulate(T, dt)
+print("lost sheep:", len(a.lose_sheeps))
 
 #input("Press Enter to continue...")
 
