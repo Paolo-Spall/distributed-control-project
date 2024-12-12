@@ -912,7 +912,7 @@ initial_weather, initial_temperature = get_random_initial_weather()
 
 # Frame inferiore per il pulsante--> pulsanti in basso
 bottom_frame = tk.Frame(root)
-bottom_frame.pack(side=tk.BOTTOM, fill=tk.X)
+bottom_frame.pack(side=tk.LEFT, fill=tk.X)
 
 ##########################################
 #PULSANTI
@@ -926,7 +926,7 @@ disable_button(start_button, "lightgreen")
 # Pulsante Task Manager
 task_manager_button = tk.Button(bottom_frame, text="Task Manager", command=on_task_manager, height=4, width=10, bg="yellow",
                         fg="black")
-task_manager_button.pack(side=tk.LEFT, pady=10, padx=10, expand=True, fill=tk.BOTH, anchor=tk.CENTER)
+task_manager_button.pack(side=tk.UP, pady=10, padx=10, expand=True, fill=tk.BOTH, anchor=tk.CENTER)
 
 # Pulsante Help
 help_button = tk.Button(bottom_frame, text="Help", command=on_help, height=4, width=10, bg="lightblue", fg="black")
@@ -953,8 +953,8 @@ quit_button.pack(side=tk.LEFT,pady=10,padx=10, expand=True, fill=tk.BOTH, anchor
 #Creazione mappa
 
 #frame per la mappa
-bottom_frame = tk.Frame(root)
-bottom_frame.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+right_frame = tk.Frame(root)
+right_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
 
 # Mostra il messaggio iniziale
 initial_message()
@@ -967,8 +967,8 @@ ax.set_xlim(0, img.shape[1])
 ax.set_ylim(0, img.shape[0])
 
 # Collega il grafico Matplotlib al frame inferiore e posizionalo con place
-canvas = FigureCanvasTkAgg(fig, master=bottom_frame)
-canvas.get_tk_widget().place(x=300, y=0, width=800, height=600)
+canvas = FigureCanvasTkAgg(fig, master=right_frame)
+canvas.get_tk_widget().place(x=500, y=0, width=800, height=800)
 
 # Configura la chiusura della finestra
 root.protocol("WM_DELETE_WINDOW", lambda: root.destroy())
