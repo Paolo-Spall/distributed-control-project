@@ -311,7 +311,7 @@ def on_start():
 
     horizontal_frame.destroy()
 
-    side_frame = tk.Frame(root, width=200, bg="white")
+    side_frame = tk.Frame(root, width=200, bg="white", bd=2, relief="solid")
     side_frame.place(x=0, y=0)
 
     # Etichetta per il primo messaggio (inizialmente vuota o con un testo di placeholder)
@@ -354,6 +354,14 @@ def on_start():
     save_final_report()
     enable_drawing()
     set_pencil_cursor()
+    final_text = (
+        "\n\n\n\n"
+        "The program is finished.\n\n"
+        "The flock is returned on the sheepfold.\n"
+        "You can draw a new route\n"
+    )
+    info_label = tk.Label(side_frame, text=final_text, justify=tk.LEFT, font=("Arial", 12), bg="white")
+    info_label.pack(pady=10)
 
 def on_help():
     # Crea una finestra figlia indipendente
@@ -486,7 +494,7 @@ def on_contacts():
     # Impedisce che altre interazioni avvengano nella finestra principale
     window.transient(root)
     window.grab_set()
-    contact_text = ("You can contact assistance at the following numbers:\n"
+    contact_text = ("You can contact assistance at the following references:\n"
         "Phone: 1234567890\n"
         "Email: sheperding.service@gmail.com\n"
         "Chat: www.sheperding.service.it\n"
@@ -880,6 +888,13 @@ img = mpimg.imread(image_path)
 # Finestra principale di Tkinter
 root = tk.Tk()
 root.title("Draw the route")
+
+# Imposta la finestra a schermo intero
+root.attributes("-fullscreen", True)
+
+# Configura la chiusura della finestra
+root.protocol("WM_DELETE_WINDOW", lambda: root.destroy())
+
 
 screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
