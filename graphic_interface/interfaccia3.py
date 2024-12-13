@@ -39,6 +39,7 @@ danger_symbol = {
     "Danger": "⚠"
 }
 
+text_font = ("Arial", 12)
 
 def error_message():
     # Crea una finestra figlia indipendente
@@ -309,7 +310,7 @@ def on_start(side_frame):
     temperature = initial_temperature  # Usa la stessa temperatura iniziale
     total_time = hours * 60 + minutes
 
-    horizontal_frame.destroy()
+    # horizontal_frame.destroy()
 
 
     text = (
@@ -322,7 +323,7 @@ def on_start(side_frame):
     )
 
     # Etichetta per il secondo messaggio
-    info_label = tk.Label(side_frame, text=text, width=23,  wraplength=250, justify=tk.LEFT, font=("Arial", 20), bg="white")
+    info_label = tk.Label(side_frame, text=text, width=30,  wraplength=250, justify=tk.LEFT, font=text_font, bg="white")
     info_label.pack(pady=10)
     disable_button(start_button, "lightgreen")
     enable_button(program_overview_button, "lightblue")
@@ -331,11 +332,11 @@ def on_start(side_frame):
     enable_drawing()
     set_pencil_cursor()
     final_text = (
-        "\n\n\n"
-        "The program is finished.\n\n"
+        "\n\n"
+        "Grazing activity is over.\n\n"
         "You can draw a new route\n"
     )
-    info_label = tk.Label(side_frame, text=final_text, justify=tk.LEFT, width=23,  wraplength=250, font=("Arial", 20), bg="white")
+    info_label = tk.Label(side_frame, text=final_text, width=30,  wraplength=250, justify=tk.LEFT, font=text_font, bg="white")
     info_label.pack(pady=10)
 
 def on_help():
@@ -715,7 +716,9 @@ def on_further_info():
         "Sheep in the flock: 20\n"
         "Sheep retrieved: 0\n"
         "Sheep lost: 0\n"
-        "Sheep in danger: 0\n"
+        "Sheep in danger: 0\n\n"
+        "Average speed of the flock: 3.8 [km/h]\n"
+        "Average rate of chasing modality: 0.6"
         )
     
     # Centrare la finestra
@@ -904,15 +907,15 @@ bottom_frame.pack(side=tk.LEFT, fill=tk.Y)
 large_font = font.Font(size=screen_height//40)
 medium_font = font.Font(size=screen_height//50)
 
-# Pulsante weather
+# Pulsante Utils
 weather_button = tk.Button(bottom_frame, text="Utils", command=on_weather, bg="lightblue",
                            fg="black", font = large_font)  # , font=("Arial", 20))
-weather_button.pack(side=tk.BOTTOM, pady=10, padx=10, expand=True, fill=tk.BOTH, anchor=tk.CENTER)
+weather_button.pack(side=tk.BOTTOM,pady=30,padx=20, expand=True, fill=tk.BOTH, anchor=tk.CENTER)
 
 # Pulsante Task Manager
 task_manager_button = tk.Button(bottom_frame, text="Task Manager", command=on_task_manager, bg="yellow",
                         fg="black", font = large_font)
-task_manager_button.pack(side=tk.BOTTOM, pady=10, padx=10, expand=True, fill=tk.BOTH, anchor=tk.CENTER)
+task_manager_button.pack(side=tk.BOTTOM, pady=30,padx=20, expand=True, fill=tk.BOTH, anchor=tk.CENTER)
 
 # Pulsante Program Overview
 program_overview_button = tk.Button(side_frame, text="Activity Overview", command=on_further_info,  bg="lightblue",
@@ -923,19 +926,19 @@ disable_button(program_overview_button, "gray")
 
 # Pulsante Start
 start_button = tk.Button(bottom_frame, text="Start", command=partial(on_start, side_frame),  bg="green", fg="black", font = large_font)
-start_button.pack(side=tk.BOTTOM,pady=10,padx=10, expand=True, fill=tk.BOTH, anchor=tk.CENTER)
+start_button.pack(side=tk.BOTTOM,pady=30,padx=20, expand=True, fill=tk.BOTH, anchor=tk.CENTER)
 
 disable_button(start_button, "lightgreen")
 
 
 # Pulsante Help
 help_button = tk.Button(bottom_frame, text="Help", command=on_help,  bg="lightblue", fg="black", font = medium_font)
-help_button.pack(side=tk.LEFT, pady=10, padx=10, expand=True, fill=tk.BOTH, anchor='ne')
+help_button.pack(side=tk.LEFT, pady=30, padx=5, expand=True, fill=tk.BOTH, anchor='ne')
 
 
 # Pulsante quit
 quit_button = tk.Button(bottom_frame, text="Quit", command=on_quit_program,  bg="red", fg="black", font=medium_font)
-quit_button.pack(side=tk.LEFT,pady=10,padx=10, expand=True, fill=tk.BOTH, anchor='nw')
+quit_button.pack(side=tk.LEFT,pady=30,padx=5, expand=True, fill=tk.BOTH, anchor='nw')
 
 
 
@@ -963,7 +966,7 @@ ax.set_ylim(0, img.shape[0])
 canvas = FigureCanvasTkAgg(fig, master=right_frame)
 
  
-canvas.get_tk_widget().place(x=0, y=0, width=1000, height=round(screen_height*2/3))
+canvas.get_tk_widget().place(x=0, y=0, width=round(screen_width*0.56), height=round(screen_height*0.9))
 
 # Configura la chiusura della finestra
 root.protocol("WM_DELETE_WINDOW", lambda: root.destroy())
