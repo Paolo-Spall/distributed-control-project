@@ -39,7 +39,7 @@ danger_symbol = {
     "Danger": "⚠"
 }
 
-text_font = ("Arial", 12)
+text_font = ("Arial", 15)
 
 def error_message():
     # Crea una finestra figlia indipendente
@@ -86,7 +86,7 @@ def error_message():
     close_button = tk.Button(
         window,
         text="Close",
-        font=("Arial", 12),
+        font=("Arial", 14),
         bg="red",
         fg="white",
         command=window.destroy  # Distrugge solo la finestra di errore
@@ -326,10 +326,12 @@ def on_start(side_frame):
     info_label = tk.Label(side_frame, text=text, width=30,  wraplength=250, justify=tk.LEFT, font=text_font, bg="white")
     info_label.pack(pady=10)
     disable_button(start_button, "lightgreen")
-    enable_button(program_overview_button, "lightblue")
+    enable_button(program_overview_button, "pink")
+    enable_button(task_manager_button, "yellow")
     highlight_trace(points, total_time=total_time)
     save_final_report()
     enable_drawing()
+    disable_button(task_manager_button, "lightyellow")
     set_pencil_cursor()
     final_text = (
         "\n\n"
@@ -364,13 +366,13 @@ def on_help():
     info_label = tk.Label(window, justify=tk.LEFT, font=("Arial", 14), bg="white")
     info_label.pack(pady=10)
 
-    user_manual_button = tk.Button(window, text="User Manual", command=on_user_manual, height=4, width=10, bg="lightblue", fg="black")
+    user_manual_button = tk.Button(window, text="User Manual", command=on_user_manual, height=4, width=10, font=("Arial", 20), bg="lightblue", fg="black")
     user_manual_button.pack(side=tk.LEFT, pady=10, padx=10, expand=True, fill=tk.BOTH, anchor=tk.CENTER)
 
     # chat_button = tk.Button(window, text="Chat", command=on_chat, height=4, width=10, bg="lightblue", fg="black")
     # chat_button.pack(side=tk.LEFT, pady=10, padx=10,expand=True, fill=tk.BOTH, anchor=tk.CENTER)
     
-    contact_button = tk.Button(window, text="Contacts", command=on_contacts, height=4, width=10, bg="lightblue", fg="black")
+    contact_button = tk.Button(window, text="Contacts", command=on_contacts, height=4, width=10, font=("Arial", 20), bg="lightblue", fg="black")
     contact_button.pack(side=tk.LEFT, pady=10, padx=10,expand=True, fill=tk.BOTH, anchor=tk.CENTER)
 
 def on_weather():
@@ -418,7 +420,7 @@ def on_weather():
     info_label.pack(pady=10)
 
     # Aggiungi un pulsante per chiudere la finestra
-    close_button = tk.Button(window, text="Close", command=window.destroy)
+    close_button = tk.Button(window, text="Close", font=("Arial", 14), command=window.destroy)
     close_button.pack(pady=10)
 
 def on_user_manual():
@@ -468,7 +470,7 @@ def on_user_manual():
         text_widget.config(state=tk.DISABLED)
         
         # Aggiungi un pulsante per chiudere la finestra
-        close_button = tk.Button(window, text="Close", command=window.destroy)
+        close_button = tk.Button(window, text="Close",font=("Arial", 14), command=window.destroy)
         close_button.pack(pady=10)
     except Exception as e:
         messagebox.showerror("Error", f"An error occurred: {e}")
@@ -503,7 +505,7 @@ def on_contacts():
     info_label.pack(pady=10)
 
     # Aggiungi un pulsante per chiudere la finestra
-    close_button = tk.Button(window, text="Close", command=window.destroy)
+    close_button = tk.Button(window, text="Close", font=("Arial", 14), command=window.destroy)
     close_button.pack(pady=10)
 
 def initial_message():
@@ -544,10 +546,22 @@ def initial_message():
 
     # Inizia l'animazione
     animate_gif()
+    
+    show_again_var = tk.BooleanVar(value=True)  # Di default è spuntata
 
+    # Checkbox per "Don't show it again"
+    checkbox = tk.Checkbutton(
+        window,
+        text="Don't show it again",
+        variable=show_again_var,
+        bg="lightgray",
+        font=("Arial", 10),
+        anchor="e"
+    )
+    checkbox.pack(side="bottom", pady=10)
 
     # Pulsante "I understand"
-    button = tk.Button(window, text="I understand", command=window.destroy, font=("Arial", 12))
+    button = tk.Button(window, text="I understand", command=window.destroy, font=("Arial", 16)) 
     button.pack(pady=10)
 
     # Impedisce che altre interazioni avvengano nella finestra principale
@@ -567,7 +581,7 @@ def on_task_manager():
     # Impedisce che altre interazioni avvengano nella finestra principale
     window.transient(root)
     window.grab_set()
-    help_text = ("Chose what to do next")
+    
 
     # Centrare la finestra
     window.update_idletasks()
@@ -579,19 +593,16 @@ def on_task_manager():
     position_right = (screen_width // 2) - (window_width // 2)
     window.geometry(f"{window_width}x{window_height}+{position_right}+{position_top}")
 
-    # Aggiungere scritte
-    info_label = tk.Label(window, text=help_text, justify=tk.LEFT, font=("Arial", 14), bg="white")
-    info_label.pack(pady=10)
 
     user_manual_button = tk.Button(window, text="Bring back the flock", command=partial(on_bring_back, window),
-                                   height=4, width=10, bg="lightblue", fg="black")
+                                   height=4, width=10, font=("Arial", 20),bg="lightblue", fg="black")
     user_manual_button.pack(side=tk.LEFT, pady=10, padx=10, expand=True, fill=tk.BOTH, anchor=tk.CENTER)
 
     # chat_button = tk.Button(window, text="Chat", command=on_chat, height=4, width=10, bg="lightblue", fg="black")
     # chat_button.pack(side=tk.LEFT, pady=10, padx=10,expand=True, fill=tk.BOTH, anchor=tk.CENTER)
 
     contact_button = tk.Button(window, text="Pause the pasture", command=partial(on_pause, window), height=4, width=10,
-                               bg="lightblue", fg="black")
+                               font=("Arial", 20), bg="lightblue", fg="black")
     contact_button.pack(side=tk.LEFT, pady=10, padx=10, expand=True, fill=tk.BOTH, anchor=tk.CENTER)
 
 def on_pause(old_window):
@@ -627,7 +638,7 @@ def on_pause(old_window):
     info_label.pack(pady=10)
 
     # Aggiungi un pulsante per chiudere la finestra
-    close_button = tk.Button(window, text="Resume", command=window.destroy)
+    close_button = tk.Button(window, text="Resume",font=("Arial", 14), command=window.destroy)
     close_button.pack(pady=10)
 
     # contact_button = tk.Button(window, text="Resume", command=partial(on_resume, window), height=4, width=10, bg="lightblue", fg="black")
@@ -668,7 +679,7 @@ def on_bring_back(old_window):
     info_label.pack(pady=10)
 
     # Aggiungi un pulsante per chiudere la finestra
-    close_button = tk.Button(window, text="Ok", command=window.destroy)
+    close_button = tk.Button(window, text="Ok",font=("Arial", 18), width = 4, height = 2, command=window.destroy)
     close_button.pack(pady=10)
 
 def on_quit_program():
@@ -682,6 +693,16 @@ def on_quit_program():
     window.geometry("400x200")  # Dimensioni predefinite
     window.configure(bg="white")
 
+      # Centrare la finestra
+    window.update_idletasks()
+    screen_width = window.winfo_screenwidth()
+    screen_height = window.winfo_screenheight()
+    window_width = window.winfo_width()
+    window_height = window.winfo_height()
+    position_top = (screen_height // 2) - (window_height // 2)
+    position_right = (screen_width // 2) - (window_width // 2)
+    window.geometry(f"{window_width}x{window_height}+{position_right}+{position_top}")
+
     # Impedisce l'interazione con la finestra principale
     window.transient(root)
     window.grab_set()
@@ -694,7 +715,7 @@ def on_quit_program():
     info_label.pack(pady=20)
 
     # Pulsante per chiudere il programma
-    close_button = tk.Button(window, text="Ok", command=lambda: close_program(window))
+    close_button = tk.Button(window, text="Ok",font=("Arial", 18), width = 4, height = 2, command=lambda: close_program(window))
     close_button.pack(pady=10)
 
 def close_program(window):
@@ -717,8 +738,18 @@ def on_further_info():
         "Sheep retrieved: 0\n"
         "Sheep lost: 0\n"
         "Sheep in danger: 0\n\n"
+        "Number of chasing dogs: 0\n"
+        "Formation dogs: 6\n"
+        "Formations executed: exagonal, pentagonal \n\n"
+        "Coverage area: 1 [km^2]\n"
+        "Drones altitude: 20 [m]\n\n"
+        "Path traveled: 17.6 [km]\n"
+        "Shepherding time: 4 hours and 23 minutes\n"
+        "Distance from the sheepfold: 5 [km]\n"
+        "Maximum chasing distance: 50 [m]\n\n"
         "Average speed of the flock: 3.8 [km/h]\n"
-        "Average rate of chasing modality: 0.6"
+        "Average rate of chasing modality: 0.6\n"
+        
         )
     
     # Centrare la finestra
@@ -736,7 +767,7 @@ def on_further_info():
     info_label.pack(pady=10)
 
     # Aggiungi un pulsante per chiudere la finestra
-    close_button = tk.Button(window, text="Close", command=window.destroy)
+    close_button = tk.Button(window, text="Close", font=("Arial", 14), command=window.destroy)
     close_button.pack(pady=10)
     
 def set_pencil_cursor():
@@ -797,7 +828,7 @@ def continue_command(old_window=None):
     label.pack(padx=20, pady=20)
 
     # Pulsante "I understand"
-    button = tk.Button(new_window, text="I understand", command=new_window.destroy, font=("Arial", 12))
+    button = tk.Button(new_window, text="I understand",command=new_window.destroy, font=("Arial", 18))
     button.pack(pady=10)
 
     # Impedisce che altre interazioni avvengano nella finestra principale
@@ -926,11 +957,13 @@ task_manager_button = tk.Button(bottom_frame, text="Task Manager", command=on_ta
                         fg="black", font = large_font)
 task_manager_button.pack(side=tk.BOTTOM, pady=30,padx=20, expand=True, fill=tk.BOTH, anchor=tk.CENTER)
 
+disable_button(task_manager_button, "lightyellow")
+
 # Pulsante Program Overview
-program_overview_button = tk.Button(side_frame, text="Activity Overview", command=on_further_info,  bg="lightblue",
+program_overview_button = tk.Button(side_frame, text="Activity Overview", command=on_further_info,  bg="pink",
                         fg="black", font = large_font)
 program_overview_button.pack(side=tk.BOTTOM, pady=10, padx=10, anchor=tk.CENTER)
-disable_button(program_overview_button, "gray")
+disable_button(program_overview_button, "lightpink")
 
 
 # Pulsante Start
