@@ -878,13 +878,15 @@ root.protocol("WM_DELETE_WINDOW", lambda: root.destroy())
 uns_screen_width = root.winfo_screenwidth()
 uns_screen_height = root.winfo_screenheight()
 # Ottieni la scala DPI
-dpi_scaling = root.tk.call('tk', 'scaling') 
+#dpi_scaling = root.tk.call('tk', 'scaling') 
+
+dpi_scaling = 1
 
 # Calcola la dimensione reale dello schermo
 screen_width = int(uns_screen_width * dpi_scaling)
 screen_height = int(uns_screen_height * dpi_scaling)
 
-root.state('zoomed')
+root.state('normal')
 
 # Set the size of the main window
 #root.geometry(f"{screen_width}x{screen_height}")  # Width x Height
