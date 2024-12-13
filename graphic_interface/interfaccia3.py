@@ -311,55 +311,31 @@ def on_start(side_frame):
 
     horizontal_frame.destroy()
 
-    
 
-    # Etichetta per il primo messaggio (inizialmente vuota o con un testo di placeholder)
-    message_label = tk.Label(
-        side_frame,
-        text="",  # Testo vuoto inizialmente
-        font=("Arial", 14),
-        wraplength=180,
-        justify=tk.LEFT,
-        bg="white"
-    )
-    message_label.pack(side=tk.TOP, padx=0, pady=0)
+    text = (
+            "\n"
+            "Grazing activity is in progress.\n\n"
+            "Start time: 10:00\n"
+            "Expected return time: 18:23\n\n"
+            "No anomalies detected.\n"
 
-    if discard_route:
-        text = (
-            "The route you draw has been modified to be feasible.\n\n"
-            f"Route duration: {hours} hours and {minutes} minute\n"
-            "Expected return time of the flock to the sheepfold:\nbetween 18:00 and 19:00\n\n"
-        )
-    else:
-        # Prova con un testo semplificato (senza caratteri speciali)
-        text = (
-            "Route accepted.\n\n"
-            f"Route duration: {hours} hours and {minutes} minute\n"
-            "Expected return time of the flock to the sheepfold:\nbetween 18:00 and 19:00\n\n"
-        )
-
-    # Testo da visualizzare
-    text += (
-        "\n\n\n\n"
-        "The program is running.\n\n"
-        "The flock is moving along the route.\n"
     )
 
     # Etichetta per il secondo messaggio
-    info_label = tk.Label(side_frame, text=text, justify=tk.LEFT, font=("Arial", 12), bg="white")
+    info_label = tk.Label(side_frame, text=text, width=23,  wraplength=250, justify=tk.LEFT, font=("Arial", 20), bg="white")
     info_label.pack(pady=10)
     disable_button(start_button, "lightgreen")
+    enable_button(program_overview_button, "lightblue")
     highlight_trace(points, total_time=total_time)
     save_final_report()
     enable_drawing()
     set_pencil_cursor()
     final_text = (
-        "\n\n\n\n"
+        "\n\n\n"
         "The program is finished.\n\n"
-        "The flock is returned on the sheepfold.\n"
         "You can draw a new route\n"
     )
-    info_label = tk.Label(side_frame, text=final_text, justify=tk.LEFT, font=("Arial", 12), bg="white")
+    info_label = tk.Label(side_frame, text=final_text, justify=tk.LEFT, width=23,  wraplength=250, font=("Arial", 20), bg="white")
     info_label.pack(pady=10)
 
 def on_help():
@@ -399,19 +375,31 @@ def on_help():
 def on_weather():
     # Crea una finestra figlia indipendente
     window = tk.Toplevel(root)
-    window.title("Weather")
-    window.geometry("600x300")
+    window.title("Utils")
+    window.geometry("600x600")
     window.configure(bg="white")
 
     # Impedisce che altre interazioni avvengano nella finestra principale
     window.transient(root)
     window.grab_set()
-    weather_text = ("\nCurrent state\n"
+    weather_text = ("\nENVIRONMENT CONDITION:\n\n"
                     "📅: 2024-12-25\n"
             "🕒 : 10:00 \n"
             f"🌥: {initial_weather}\n"
             f"🌡: {initial_temperature}°C\n\n"
             "No significant weather changes are anticipated in the next hours.\n"
+            "\n\n FLEET STATUS:\n\n"
+            "Drone 1 battery: 100%\n"
+            "Drone 2 battery: 98%\n"
+            "Drone 3 battery: 100%\n"
+            "Drone 4 battery: 97%\n"
+            "Drone 5 battery: 100%\n\n"
+            "Robotic dog 1 battery: 100%\n"
+            "Robotic dog 2 battery: 96%\n"
+            "Robotic dog 3 battery: 99%\n"
+            "Robotic dog 4 battery: 95%\n"
+            "Robotic dog 5 battery: 100%\n"
+            "Robotic dog 6 battery: 100%\n\n"
         )
     
     # Centrare la finestra
@@ -723,18 +711,7 @@ def on_further_info():
     # Impedisce che altre interazioni avvengano nella finestra principale
     window.transient(root)
     window.grab_set()
-    contact_text = ("\n\n\n"
-        "Drone 1 battery: 100%\n"
-        "Drone 2 battery: 98%\n"
-        "Drone 3 battery: 100%\n"
-        "Drone 4 battery: 97%\n"
-        "Drone 5 battery: 100%\n\n"
-        "Robotic dog 1 battery: 100%\n"
-        "Robotic dog 2 battery: 96%\n"
-        "Robotic dog 3 battery: 99%\n"
-        "Robotic dog 4 battery: 95%\n"
-        "Robotic dog 5 battery: 100%\n"
-        "Robotic dog 6 battery: 100%\n\n"
+    contact_text = ("GRAZE ACTIVITY SUMMARY INFO:\n\n"
         "Sheep in the flock: 20\n"
         "Sheep retrieved: 0\n"
         "Sheep lost: 0\n"
@@ -928,7 +905,7 @@ large_font = font.Font(size=screen_height//40)
 medium_font = font.Font(size=screen_height//50)
 
 # Pulsante weather
-weather_button = tk.Button(bottom_frame, text="Weather", command=on_weather, bg="lightblue",
+weather_button = tk.Button(bottom_frame, text="Utils", command=on_weather, bg="lightblue",
                            fg="black", font = large_font)  # , font=("Arial", 20))
 weather_button.pack(side=tk.BOTTOM, pady=10, padx=10, expand=True, fill=tk.BOTH, anchor=tk.CENTER)
 
@@ -938,9 +915,10 @@ task_manager_button = tk.Button(bottom_frame, text="Task Manager", command=on_ta
 task_manager_button.pack(side=tk.BOTTOM, pady=10, padx=10, expand=True, fill=tk.BOTH, anchor=tk.CENTER)
 
 # Pulsante Program Overview
-program_overview_button = tk.Button(bottom_frame, text="Activity Overview", command=on_further_info,  bg="lightblue",
+program_overview_button = tk.Button(side_frame, text="Activity Overview", command=on_further_info,  bg="lightblue",
                         fg="black", font = large_font)
-program_overview_button.pack(side=tk.BOTTOM, pady=10, padx=10, expand=True, fill=tk.BOTH, anchor=tk.CENTER)
+program_overview_button.pack(side=tk.BOTTOM, pady=10, padx=10, anchor=tk.CENTER)
+disable_button(program_overview_button, "gray")
 
 
 # Pulsante Start
@@ -952,12 +930,12 @@ disable_button(start_button, "lightgreen")
 
 # Pulsante Help
 help_button = tk.Button(bottom_frame, text="Help", command=on_help,  bg="lightblue", fg="black", font = medium_font)
-help_button.pack(side=tk.TOP, pady=10, padx=10, expand=True, fill=tk.BOTH, anchor='ne')
+help_button.pack(side=tk.LEFT, pady=10, padx=10, expand=True, fill=tk.BOTH, anchor='ne')
 
 
 # Pulsante quit
 quit_button = tk.Button(bottom_frame, text="Quit", command=on_quit_program,  bg="red", fg="black", font=medium_font)
-quit_button.pack(side=tk.TOP,pady=10,padx=10, expand=True, fill=tk.BOTH, anchor='nw')
+quit_button.pack(side=tk.LEFT,pady=10,padx=10, expand=True, fill=tk.BOTH, anchor='nw')
 
 
 
@@ -966,9 +944,9 @@ quit_button.pack(side=tk.TOP,pady=10,padx=10, expand=True, fill=tk.BOTH, anchor=
 #Creazione mappa
 
 #frame per la mappa
-map_frame_width = round(screen_width)#*2/3)
+map_frame_width = round(screen_width)
 
-right_frame = tk.Frame(root, width=1900, bg="yellow")
+right_frame = tk.Frame(root, width=map_frame_width, bg="white")
 right_frame.pack(side=tk.LEFT, fill=tk.Y, expand=True)
 
 # Mostra il messaggio iniziale
