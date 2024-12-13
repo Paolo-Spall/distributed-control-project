@@ -874,6 +874,7 @@ root.title("Automated Sheperding System")
 # Configura la chiusura della finestra
 root.protocol("WM_DELETE_WINDOW", lambda: root.destroy())
 
+root.state('normal')
 
 uns_screen_width = root.winfo_screenwidth()
 uns_screen_height = root.winfo_screenheight()
@@ -886,7 +887,7 @@ dpi_scaling = 1
 screen_width = int(uns_screen_width * dpi_scaling)
 screen_height = int(uns_screen_height * dpi_scaling)
 
-root.state('normal')
+
 
 # Set the size of the main window
 #root.geometry(f"{screen_width}x{screen_height}")  # Width x Height
