@@ -228,7 +228,7 @@ def get_random_initial_weather():
 # Funzione per salvare i punti del percorso in un file di testo
 def save_path():
     try:
-        save_location = "path_points.txt"
+        save_location = "path_points1.txt"
         with open(save_location, "w") as file:
             for point in points:
                 file.write(f"{point[0]}, {point[1]}\n")

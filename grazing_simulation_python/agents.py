@@ -12,7 +12,7 @@ import math
 
 class Dog:
     k_repulsive = 50
-    d_limit = 7./2. # distnza entra la quale le pecore sentono la presenza dei cani
+    d_limit = 7./1.5 # distnza entra la quale le pecore sentono la presenza dei cani
     ########################################
     re_entered = 7.5 # distanza alla quale la pecore è considerata recuperata
     k_run = 25
@@ -50,7 +50,7 @@ class Dog:
 
             # Cerca sé stesso nella lista self.sim.chasing_dog
             for pair in self.sim.chasing_assignment:
-                if len(self.sim.dogs_form) > 3:
+                if len(self.sim.dogs_form) > 5:
                     if self == pair[0]:  # Se il cane è il primo elemento della coppia
                         self.chasing_sheep = pair[1]  # Assegna la pecora da inseguire
                         self.sim.lose_sheeps.remove(self.chasing_sheep)  # Rimuove la pecora da lose_sheeps
@@ -184,7 +184,8 @@ class Sheep:
         elif self not in self.sim.lose_sheeps:
             marker = "."
             if dist_from_cent > self.limit_dist:
-                self.sim.lose_sheeps.append(self)
+                if self not in self.sim.lose_sheeps:
+                    self.sim.lose_sheeps.append(self)
         else:
             marker = "^"
             if dist_from_cent <= self.limit_dist:

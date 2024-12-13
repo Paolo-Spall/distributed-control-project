@@ -33,6 +33,15 @@ class Simulation:
         # [x_min, x_max, y_min, y_max]
         self.chasing_assignment = []
 
+    def check_lose_sheep_duplicate(self):
+        for sheep in self.lose_sheeps:
+            i = 0
+            for sheep_copy in self.lose_sheeps:
+                if sheep == sheep_copy:
+                    i += 1
+            if i > 1:
+                print("c'è un copione")
+
     def initial_configurations(self, dt, speed):
         self.tracking_speed = speed
         self.tracking_velocity = np.zeros(2)
@@ -103,29 +112,22 @@ class Simulation:
     def assign_chasing_dogs(self):
         self.chasing_assignment.clear()
         for sheep in self.lose_sheeps:
-            dist = 1000
-            dist_pusher = 1000
-            chased_sheep = sheep
-            chasing_dog = None
-            dog_pusher = None # cane che spinge il branco
-            i = 0
+            # Calcola le distanze di tutti i cani dalla pecora
+            distances = []
             for dog in self.dogs:
-                if not dog.chasing_sheep:
-                     i += 1
-                     if i == 1:
-                         dist_pusher = np.linalg.norm(sheep.P - dog.P)
-                     else:
-                        if np.linalg.norm(sheep.P - dog.P) < dist_pusher:
-                            chasing_dog = dog_pusher
-                            dog_pusher = dog
-                            dist = dist_pusher
-                            dist_pusher = np.linalg.norm(sheep.P - dog.P)
-            if chasing_dog is not None:
-                self.chasing_assignment.append([chasing_dog, chased_sheep])
-                chasing_dog = None
+                if not dog.chasing_sheep:  # Considera solo i cani non già impegnati
+                    dist = np.linalg.norm(sheep.P - dog.P)
+                    distances.append((dist, dog))
 
+            # Ordina i cani in base alla distanza crescente
+            distances.sort(key=lambda x: x[0])
 
-    
+            # Seleziona il terzo cane più vicino come chasing_dog
+            chasing_dog = None
+            if len(distances) >= 3:  # Controlla che ci siano almeno tre cani
+                chasing_dog = distances[0][1]  # Primo elemento della lista ordinata
+                self.chasing_assignment.append([chasing_dog, sheep])
+
     def track_path(self):
         """compute the common control input for the dogs to track the path"""
         distance = self.tracked_point - self.center_trail[-1]
@@ -159,12 +161,11 @@ class Simulation:
         return centroids  # Returning centroids
 
 
-    def step(self, dt, i):
+    def step(self, dt):
         self.compute_dog_center()
         self.track_path()
-        #self.compute_center_velocity(dt)
         self.assign_chasing_dogs()
-        #print(self.chasing_assignment)
+        self.check_lose_sheep_duplicate()
         for dog in self.dogs:
             dog.step(dt)
         for sheep in self.sheeps:
@@ -172,17 +173,15 @@ class Simulation:
 
         p_des_drones = self.compute_coverage_drones()
 
-        for drone, p_des_drone  in zip(self.drones, p_des_drones):
+        for drone, p_des_drone in zip(self.drones, p_des_drones):
             drone.step(dt, p_des_drone)
-
-
 
     def simulate(self, T, dt):
         
         self.dt = dt
         t = 0.
         while self.simulation_on:
-            self.step(dt, int(t/dt))
+            self.step(dt)
             self.iter_steps_n += 1
             t += dt
         print("time",t)
@@ -272,13 +271,14 @@ class Simulation:
 
         instances_list = dog_instances + sheep_instances + drones_instances
 
+        time.sleep(1)
         for i in range(self.iter_steps_n - 1):
             for py_agent, copp_agent in instances_list:
                 if isinstance(py_agent, Drone):
                     sim.setObjectPosition(copp_agent, -1, py_agent.trail[i].tolist() + [4])
                 else:
                     sim.setObjectPosition(copp_agent, -1, py_agent.trail[i].tolist() + [0])
-            #time.sleep(0.01)
+            time.sleep(0.001)
 
         #sim.saveScene('scene.ttt')
         #sim.stopSimulation()
