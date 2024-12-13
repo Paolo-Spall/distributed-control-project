@@ -875,11 +875,20 @@ root.title("Automated Sheperding System")
 root.protocol("WM_DELETE_WINDOW", lambda: root.destroy())
 
 
-screen_width = root.winfo_screenwidth()
-screen_height = root.winfo_screenheight()
+uns_screen_width = root.winfo_screenwidth()
+uns_screen_height = root.winfo_screenheight()
+# Ottieni la scala DPI
+dpi_scaling = root.tk.call('tk', 'scaling') 
+
+# Calcola la dimensione reale dello schermo
+screen_width = int(uns_screen_width * dpi_scaling)
+screen_height = int(uns_screen_height * dpi_scaling)
+
+root.state('zoomed')
 
 # Set the size of the main window
-root.geometry(f"{screen_width}x{screen_height}")  # Width x Height
+#root.geometry(f"{screen_width}x{screen_height}")  # Width x Height
+
 
 # Crea il frame laterale con altezza limitata a metà della schermata
 horizontal_frame = tk.Frame(root, height=5, bg="white")
