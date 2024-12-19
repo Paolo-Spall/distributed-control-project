@@ -8,6 +8,7 @@ from functools import partial
 import numpy as np
 import random
 import time
+import os
 
 
 # Percorso all'immagine di sfondo
@@ -289,7 +290,7 @@ def highlight_trace(points, color='red', total_time=5):
         canvas.get_tk_widget().update()
         time.sleep(delay)
         a.remove()
-        if time.time()-wait > random.randrange(25, 40):
+        if time.time()-wait > random.randrange(3, 4):
             error_message()
             wait = time.time()
             # delay_time = 10  # Tempo di ritardo in secondi
@@ -902,15 +903,21 @@ root.title("Automated Sheperding System")
 # # Imposta la finestra a schermo intero
 # root.attributes("-fullscreen", True)
 
+def on_closing():
+    root.quit()
+    root.destroy()
+    os._exit(0)
+
+
 # Configura la chiusura della finestra
-root.protocol("WM_DELETE_WINDOW", lambda: root.destroy())
+root.protocol("WM_DELETE_WINDOW", on_closing)
 
 
 uns_screen_width = root.winfo_screenwidth()
 uns_screen_height = root.winfo_screenheight()
 # Ottieni la scala DPI
 dpi_scaling = root.tk.call('tk', 'scaling') 
-
+dpi_scaling = 1
 # Calcola la dimensione reale dello schermo
 screen_width = int(uns_screen_width * dpi_scaling)
 screen_height = int(uns_screen_height * dpi_scaling)
@@ -1008,10 +1015,10 @@ ax.set_ylim(0, img.shape[0])
 canvas = FigureCanvasTkAgg(fig, master=right_frame)
 
  
-canvas.get_tk_widget().place(x=0, y=0, width=round(screen_width*0.56), height=round(screen_height*0.9))
+canvas.get_tk_widget().place(x=0, y=0, width=round(screen_width*0.7), height=round(screen_height*0.9))
 
 # Configura la chiusura della finestra
-root.protocol("WM_DELETE_WINDOW", lambda: root.destroy())
+#root.protocol("WM_DELETE_WINDOW", lambda: root.destroy())
 
 #Mostra il messaggio iniziale
 show_weather_top_interface()
